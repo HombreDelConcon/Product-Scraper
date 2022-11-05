@@ -1,0 +1,177 @@
+> For scraping:
+	-Starting the web scraping there are two main libraries I learned about to scrape the web:
+		~ requests 
+		~ urllib
+	- I went with requests as many people online were recommending it for its reliability
+	- before getting started in web scraping you have to be familiar to a certain extent with the 
+	structure of websites and how their elements work so that you can get only what you want out of it,
+	this does not mean you have to be an expert in website building but we have to know a few basic things:
+		~ how website structuring works
+		~ element class
+		~ element ID
+		~ element name
+		~ different tags and their uses
+	- Process of scraping a site with python's BeautifulSoup and the requests library:
+		~ Web scraping shouldn't be confused with web crawling. When you web scrape, you are extracting 
+		information from a website and cleaning it up to then use it in some practical way or maybe not
+		use it at all. When you web-crawl, what you are doing is getting a URL and traversing every single
+		other URL to which this URL connects to. So, web-scraping is for collecting data from a website and
+		web-crawling is for figuring out how a website is connected.
+		~ When we want to scrape data from a site we have to first import the requests library as well
+		as BeautifulSoup from the bs4 library
+		~ First we have to get a URL from some website, doesn't matter which. This URL will be like our
+		starting point for scraping
+		~ We also have to pass in some HTTP headers into our scraper because this will help our scraper 
+		to be identified as a legitimate computer and not a spam bot. Passing in HTTP headers is extremely 
+		important as it will help our scraper to not get blocked by a website's anti-bot system. Each computer
+		has a unique set of HTTP headers and they can be found at http://httpbin.org/get
+		~ After this, we then use the requests.get() method to requets the HTML for the URL we feed it. We pass
+		into the function our URL as well as headers="our_headers"
+		~ If the previous step was successful then we will have a requests object which will contain the URL
+		and all its elements. From here we then make a BeautifulSoup object by calling the BeautifulSoup() 
+		function as BeautifulSoup(our_requests_object.content, 'our_parser_of_choice') and a parser's role
+		is just to break the data that was gotten from requests into smaller pieces for processing. The 
+		thing about raw data in web scraping is that it is very filthy, like 99% of everything that is returned
+		in a requests object will just be cleaned, also the HTML from the websites is very messy most of the 
+		time with misspelled elements and unclosed tags so the parser is there to assist in breaking the site's
+		HTML down and cleaning it a little to make it more manageable.
+		~ Now that we have our BeautifulSoup object then we are ready to do some scraping. It is a very simple process;
+		we call an element or group of elements by their identificators and this is where that very basic understanding
+		of HTML comes in.
+			+ We need to be able to differentiate between the different identificators in the tags and there are 
+			3 very common ones:
+				++ ID: it is unique to each element and no two elements can have the same ID. It is best 
+				for when we want to scrape a specific element
+				++ class: it is not unique and one element can have more than one class. It is best used
+				for when we want to scrape a group of elements that all share the same class/classes. 
+				++ name: not as common as ID or class but it is still widely used to identify elements
+				so that they can be formatted with the JavaScript. This element is not unique but can
+				still be used to identify an element if the other two are missing.
+			+ elements can have an ID, or a class, or a name, or it can have all of them at once, it really 
+			is up to the developer and how they plan to style their website
+		~ After having the element we want then we can clean it up. Cleaning it up is just referring to removing the tags
+		from the text, this is because when we call an element from the BeautifulSoup objec, it returns that element together with
+		all its associated tags and we don't want these, we just want the text. So we just find the element and then call 
+		the .get_text() method to get only the text without the tag and use the .strip() method to clean up any whitespace
+		~ Boom! Done scraping; scraping done
+> For traversing sites:
+	- I looked into two libraries for this:
+		~ mechanize
+		~ selenium
+	- I went with selenium for this as I started playing around with it and simply got used to it
+	- selenium is a library that is quite packed and is capable of traversing sites by accessing the HTML elements
+	by their identificators which include:
+		~ tag name
+		~ element ID
+		~ element class
+		~ element names
+		~ xpath
+		~ their CSS selector
+		~ etc...
+	- For basic traversal of a site we follow the following steps:
+		~ Import the necessary libraries:
+			+ from selenium import websriver
+			+ from selenium.webdriver.chrome.service import Service
+			+ from selenium.webdriver.chrome.options import Options
+			+ from selenium.webdriver.common.by import By
+			+ from selenium.webdriver.common.keys import Keys
+			+ from webdriver_manager.chrome import ChromeDriverManager
+			+ from selenium.webdriver.support.ui import WebdDriverWait
+			+ from selenium.webdriver.support import expected_conditions as EC 
+			+ from prodScraper import scrapeDataNewegg
+			+ from prodScraper import scrapeDataAMZ 
+			+ import logging
+			+ import os
+			+ import time
+		~ Before we start we have to do one simple thing. Since the webdriver_manager logs to the terminal by
+		default, we have to turn this off because if we want to run this program in the background, then we may
+		not be able to do so if the program prints to the terminal. So, we write two statements:
+			+ os.environ['WDM_LOCAL'] = 'false'
+			+ logging.getLogger('WDM').setLevel(logging.NOTSET)
+		~ Now, to start we have to select our options. These are optional and are not really needed for the scraper to 
+		work, but they provide much finer customization as to how we want the traversal to be displayed or not be
+		be displayed.
+			+ I pass in three options:
+				++ options.add_argument('headless') so that the browser window does not show
+				++ options.add_argument('start-mazimized') so that the browser window is maximized 
+				from the get-go, but this does not seem to work when we pass in the 'headless' 
+				parameter thought
+				++ options.add_argument('--disable-blink-features=AutomationControlled') as this will help
+				the scraper not get caught in the CAPTCHA as often
+		~ the we build the web driver with webdriver.Chrome(service=Service(ChormeDriverManager().install()), options=
+		'the variable storing our Options() object')
+		~ Now we just call on the driver.get(URL) to have the driver access the website
+		~ from there we can use the find_elemnt(By.*identificator*, "identificator name")
+		~ we can also use the .send_keys('string') to have the driver type in somewhere
+		~ We have to remember that when we are scraping, we need to let pages load because when we try to
+		scrape the results right after attemptin to access a URL then we will not give the page enough time
+		to load and so we will not find the elements we are looking for. This is why we have the WebDriverWait()
+		method, to wait for a certain element in the page to load in before continuing with the program. I use
+		WebScrapeWait(*driver var name*, *max time to wait*).until(EC.precense_of_element_located(By.*identificator*, *ident name*)
+		~ After this, what I like to do is to use time.sleep(5) to wait an extra 5 seconds just in case that the previous method
+		raises an exception
+		~ after this, we are done traversing a site from one URL to the next
+		~ Done traversing; travesing done
+
+> Plan for scraping:
+	- For this project, the plan is to have a scraper bot traverse online retailer sites and return the search
+	results to the user. The scraper will follow these steps:
+		~ Take keyword from user as input
+		~ search online retailers with the keyword
+		~ return results in (name, price) tuples
+		~ the product images will also be downloaded to a directory
+		~ the results are then displayed to the user
+		~ If the user likes the results then the result diplayed to the user will be stored in a database (URL, name, price, keyword, image path)
+		for future reference
+
+> Additional elements:
+	- A feature to be able to download images to a directory as well as clearing this directory
+	- Logging of in-app events to a file
+	- GUI
+
+> Setbacks
+	- Walmart does not like to be scraped
+	- Target is not returning the name and price data. Apparently, you need to check the Json from the page to get that info
+	- Target is proving a worthy opponent, I need to find a way to refresh the authorization token. Found the way, it came to scraping the 
+	Auth tokens from a request to the server and then just apply those to my current search
+	- logging without triggering the webdriver_manager terminal logging is proving difficult. The solution became to just log to the database
+	- Amazon started blocking scraping attempts to force people to go through their API
+
+> Making the GUI
+	- The GUI will be made using tkinter
+	- Learn and then explain process
+
+> Downloading images to a directory
+	- The library  used to decide which directory we will be downloading the images to, we use the os module
+		~ first what I do is check which directory I am in with the os.getcwd() function. This will return the name of my current working 
+		directory. If the path of that directory is not my desired path then I can use the os.chdir() to go to my desired directory
+		~ AFter that then we start the process of scraping the images. The function I wrote for downloading images takes the URL of the 
+		image as a parameter. The function goes online and fetches whatever the link provides it, in this case it is an image which could be
+		in any format (jpg and png beingn the most popular ones). What I do is give it the extension of the format I want it in and from 
+		there it is just storing the image.
+		~ To store I open a file with the name of the image. For the name of the image I just use the URL of the image and replace all the 
+		periods as well as the forward slashes. Then I write the binary of the URL to that image and store it with the .jpg extension
+		~ After this, the function will use a helper function to _storeBLOB() to store the image into a database because in web scraping, 
+		saving the data you scrape constantly cannot be stressed enough.
+
+> Database design:
+	- For this database we are going to be using two tables:
+		~ One table to store product information 
+			+ Rows:
+				++ product URL
+				++ product name
+				++ product price
+				++ keyword
+				++ product retailer
+				++ product image key (will be used as a primary key to get the product image)
+		~ One table to store product images
+				++ product image key (used as PK)
+				++ product image stored as BLOB 
+
+
+> Making the GUI
+	- The libraries used to make the GUI are:
+		~ tkinter
+		~ customtkinter
+	- ...EXPLAIN...
+

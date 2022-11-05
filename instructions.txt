@@ -1,0 +1,53 @@
+Hello, there are two files I would like you to test:
+	1 - tkinterGUI.py (Creates the user interface for the sraper)
+	2 - getKeyword.py (Traverse sites and use the scrapers to retrieve product data)
+	3 - prodScraper.py (Contains the scrapers themselves and I want 
+
+Steps:
+	* Before you start, I personally don't use the command prompt much but I 
+	would higly suggest you run these files in the command prompt since we 
+	are using an evironment and making a really long script just to run 
+	files in an environment *
+	 
+	1 - run the autoImportLibs.py file to start with the creation of the 
+	virtual environment. It will ask if you have an environment set up, type the
+	number 2 to create the environment if it is not already created
+
+	2 - When the environment is created, it will provide you with the path to 
+	activating the environment, just copy and paste it on the command line
+
+	3 - Once the environment is activated, run the autoImportLibs.py again 
+	and this time type the number 1 to signal that the environment is created
+	and activated. This will download all the libraries into the environment 
+	(as long as you are in it).
+
+	4 - Once the necessary libraries are installed, run the "pip list" command to
+	make sure the following libraries are installed:
+		> selenium                4.2.0
+		> webdriver-manager       3.7.0
+		> beautifulsoup4          4.11.1
+		> pandas                  1.4.2
+		> mysql-connector-python  8.0.29
+		> pillow                  9.2.0
+		> lxml                    4.8.0
+		> customtkinter           4.5.1
+		> requests                2.27.1
+	if there are other libraries intalled as well, do not worry about those.
+
+	5 - Once this is done, you can run the 3 python files and see if they run with no
+	errors.
+
+if exception:
+	- Message me through teams or send an email with the name of the exception or a 
+	screenshot of it
+
+else:
+	- Message me with the name of the program that ran with no exceptions
+
+Debug:
+	- Please send me a screenshot of the GUI from your perspectives, I've only tested
+	the GUI on my desktop's aspect ratio and the size of most elements is relative to
+	the size of the display so I am not sure how different displays will affect it
+
+THANK YOU FOR YOUR HELP ;)
+	
