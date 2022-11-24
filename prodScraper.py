@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
-import pandas as pd
+#import pandas as pd
 import json
 import time
 from db_Interactions import _store_product_info as _sp
