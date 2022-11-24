@@ -44,7 +44,7 @@ from db_Interactions import _is_in_db, _get_info_by_kw
 
 #Will access the main page of Amazon and start its traversal there and return a URL with the
 #   results page
-def getKeywordAMZMain(keyword, inst):
+def getKeywordAMZMain(keyword: str, inst: int) -> str:
     if keyword == None:
         return None
     #Webdriver_manager automatically logs to the terminal by default so these will disable
@@ -187,9 +187,9 @@ def getKeywordTargetMain(keyword, inst):
     funcName = 'getKeywordTargetMain'
   
     try:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'TRG:Starting Target scraper')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'TRG:Starting Target scraper')
         options = Options()
-        options.add_argument('headless')
+        #options.add_argument('headless')
         options.add_argument('start maximized')
         options.add_argument('--disable-blink-features=AutomationControlled')
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options)
@@ -200,7 +200,7 @@ def getKeywordTargetMain(keyword, inst):
         search.send_keys(keyword)
         search.send_keys(Keys.RETURN)
     except Exception as e:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'TRG:Error in traversal')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'TRG:Error in traversal')
         return None
 
     try:
@@ -210,11 +210,11 @@ def getKeywordTargetMain(keyword, inst):
         curURL = driver.current_url
 
     except Exception as e:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'TRG:Error returning results')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'TRG:Error returning results')
         return None
 
     else:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'TRG:Traversal finished')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'TRG:Traversal finished')
         driver.quit()
         return(curURL)
 
@@ -254,6 +254,6 @@ def main():
             return (totalProdsNewegg, totalProdsAMZ, totalProdsTarget)
 
 if __name__ == '__main__':
-    x = main()
+    getKeywordTargetMain('Table', 2)
 
     
