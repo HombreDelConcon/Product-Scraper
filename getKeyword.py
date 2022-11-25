@@ -26,7 +26,7 @@ from db_Interactions import _instantiate
 from db_Interactions import _is_in_db, _get_info_by_kw
 
 
-#UPDATED: 6/28/2022
+#UPDATED: 11/24/2022
 
 #---------------IMPORTANT--------------------------------------------------------
 
@@ -37,7 +37,6 @@ from db_Interactions import _is_in_db, _get_info_by_kw
 #       - bs4
 #       - lxml
 #       - requests
-#       - pandas
 #       - tkinter
 #       - customtkinter
 
@@ -60,13 +59,19 @@ def getKeywordAMZMain(keyword: str, inst: int) -> str:
     
     #Starts up the driver which we will use to traverse the sites
     try:
+        #_sL logs to the database (see db_Interactions.py)
         _sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'AMZ:Starting Amazon scraper...')
+
+        #Add in options to the driver like headless mode so that the browser window will not pop up
         options = Options()
         options.add_argument('headless')
         options.add_argument('start_maximized')
         options.add_argument('--disable-blink-features=AutomationControlled')
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options)
         search = None
+
+        #Attempt to use one Amazon URL, since amazon tends to rotate URLs at times, this attempts to use one 
+        #   URL and if it doesn't work then it attempts to use another 
         try:
             driver.get('https://www.amazon.com/ref=nav_logo')
             #Searches for the element containing the search bar
@@ -172,7 +177,7 @@ def getKeywordNeweggMain(keyword, inst):
         driver.close()
         return curURL
 
-def getKeywordTargetMain(keyword, inst):
+def getKeywordTargetMain(keyword: str, inst: int) -> str:
     if keyword == None:
         return None
     #Webdriver_manager automatically logs to the terminal by default so these will disable
@@ -196,7 +201,7 @@ def getKeywordTargetMain(keyword, inst):
         driver.get('https://www.target.com/')
 
         search = driver.find_element(By.TAG_NAME, 'input')
-
+        time.sleep(2)
         search.send_keys(keyword)
         search.send_keys(Keys.RETURN)
     except Exception as e:
