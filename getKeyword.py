@@ -60,11 +60,11 @@ def getKeywordAMZMain(keyword: str, inst: int) -> str:
     #Starts up the driver which we will use to traverse the sites
     try:
         #_sL logs to the database (see db_Interactions.py)
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'AMZ:Starting Amazon scraper...')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'AMZ:Starting Amazon scraper...')
 
         #Add in options to the driver like headless mode so that the browser window will not pop up
         options = Options()
-        options.add_argument('headless')
+        #options.add_argument('headless')
         options.add_argument('start_maximized')
         options.add_argument('--disable-blink-features=AutomationControlled')
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options)
@@ -77,7 +77,7 @@ def getKeywordAMZMain(keyword: str, inst: int) -> str:
             #Searches for the element containing the search bar
             search = driver.find_element(By.ID, 'twotabsearchtextbox')
         except:
-            _sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'AMZ: Error with Amazon URL, attmepting to use differnt URL')
+            #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'AMZ: Error with Amazon URL, attmepting to use differnt URL')
             driver.get('https://www.amazon.com/')
             #Searches for the element containing the search bar
             search = driver.find_element(By.ID, 'twotabsearchtextbox')
@@ -90,7 +90,7 @@ def getKeywordAMZMain(keyword: str, inst: int) -> str:
         search.send_keys(Keys.RETURN)
 
     except Exception as e:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'AMZ:Error in traversal')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'AMZ:Error in traversal')
         print(e)
         return None
 
@@ -107,18 +107,18 @@ def getKeywordAMZMain(keyword: str, inst: int) -> str:
         curURL = driver.current_url
           
     except Exception as e:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'AMZ:Error returning results')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'AMZ:Error returning results')
         return None
 
     else:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'AMZ:Traversal finished')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'AMZ:Traversal finished')
 
         driver.close()
         return curURL
 
 #Will access the main page of Newegg and start its traversal there and return a URL with the
 #   results page
-def getKeywordNeweggMain(keyword, inst):
+def getKeywordNeweggMain(keyword: str, inst: int) -> str:
     if keyword == None:
         return None
     #Webdriver_manager automatically logs to the terminal by default so these will disable
@@ -134,9 +134,9 @@ def getKeywordNeweggMain(keyword, inst):
 
     #Starts up the driver which we will use to traverse the sites
     try:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'NWG:Starting Newegg scraper')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'NWG:Starting Newegg scraper')
         options = Options()
-        options.add_argument('headless')
+        #options.add_argument('headless')
         options.add_argument('start_maximized')
         options.add_argument('--disable-blink-features=AutomationControlled')
         driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options = options)
@@ -153,7 +153,7 @@ def getKeywordNeweggMain(keyword, inst):
         search.send_keys(Keys.RETURN)
 
     except Exception as e:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'NWG:Error in traversal')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'NWG:Error in traversal')
         return None
 
     #Waits until the page has loaded for a maz of 10 seconds and takes a screenshot
@@ -169,11 +169,11 @@ def getKeywordNeweggMain(keyword, inst):
         curURL = driver.current_url
           
     except Exception as e:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'NWG:Error returning results')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'NWG:Error returning results')
         return None
 
     else:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'NWG:Traversal finished')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'NWG:Traversal finished')
         driver.close()
         return curURL
 
@@ -259,6 +259,6 @@ def main():
             return (totalProdsNewegg, totalProdsAMZ, totalProdsTarget)
 
 if __name__ == '__main__':
-    getKeywordTargetMain('Table', 2)
+    getKeywordAMZMain('Table', 2)
 
     
