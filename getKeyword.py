@@ -177,6 +177,8 @@ def getKeywordNeweggMain(keyword: str, inst: int) -> str:
         driver.close()
         return curURL
 
+#Will access the main page of Target and start its traversal there and return a URL with the
+#   results page
 def getKeywordTargetMain(keyword: str, inst: int) -> str:
     if keyword == None:
         return None
@@ -192,7 +194,7 @@ def getKeywordTargetMain(keyword: str, inst: int) -> str:
     funcName = 'getKeywordTargetMain'
   
     try:
-        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'TRG:Starting Target scraper')
+        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'TRG:Starting Target scraper')
         options = Options()
         #options.add_argument('headless')
         options.add_argument('start maximized')
@@ -205,7 +207,7 @@ def getKeywordTargetMain(keyword: str, inst: int) -> str:
         search.send_keys(keyword)
         search.send_keys(Keys.RETURN)
     except Exception as e:
-        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'TRG:Error in traversal')
+        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'TRG:Error in traversal')
         return None
 
     try:
@@ -215,11 +217,11 @@ def getKeywordTargetMain(keyword: str, inst: int) -> str:
         curURL = driver.current_url
 
     except Exception as e:
-        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'TRG:Error returning results')
+        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'TRG:Error returning results')
         return None
 
     else:
-        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'TRG:Traversal finished')
+        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'TRG:Traversal finished')
         driver.quit()
         return(curURL)
 
@@ -233,6 +235,7 @@ def _getTime():
     time = strftime('%H:%M:%S')
     return time
 
+#Main function containing all of the code from the main program
 def main():
     print('Please input a keyword:')
     keyword = input()
@@ -259,6 +262,6 @@ def main():
             return (totalProdsNewegg, totalProdsAMZ, totalProdsTarget)
 
 if __name__ == '__main__':
-    getKeywordAMZMain('Table', 2)
+    getKeywordTargetMain('Table', 2)
 
     

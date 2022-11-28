@@ -3,7 +3,7 @@ import time
 
 def _store_product_info(url, prod_name, prod_price, kw, retailer, image_path):
     db = mysql.connector.connect(
-        host='127.0.0.1',
+        host='24.102.174.6',
         user='hoslyDB',
         password='Extr@ctoso700',
         database='scraperp1'
@@ -18,7 +18,7 @@ def _store_product_info(url, prod_name, prod_price, kw, retailer, image_path):
 
 def _scraper_Logs(scraper_instance, date, time, function_name, log_type, log_description):
     db = mysql.connector.connect(
-        host='127.0.0.1',
+        host='24.102.174.6',
         user='hoslyDB',
         password='Extr@ctoso700',
         database='scraperp1'
@@ -33,7 +33,7 @@ def _scraper_Logs(scraper_instance, date, time, function_name, log_type, log_des
     
 def _clear_Table(table_name=None):
     db = mysql.connector.connect(
-        host='127.0.0.1',
+        host='24.102.174.6',
         user='hoslyDB',
         password='Extr@ctoso700',
         database='scraperp1'
@@ -58,7 +58,7 @@ def _clear_Table(table_name=None):
 
 def _instantiate():
     db = mysql.connector.connect(
-        host='127.0.0.1',
+        host='24.102.174.6',
         user='hoslyDB',
         password='Extr@ctoso700',
         database='scraperp1'
@@ -77,7 +77,7 @@ def _instantiate():
 
 def _is_in_db(keyword):
     db = mysql.connector.connect(
-        host='127.0.0.1',
+        host='24.102.174.6',
         user='hoslyDB',
         password='Extr@ctoso700',
         database='scraperp1'
@@ -95,7 +95,7 @@ def _is_in_db(keyword):
 def _get_info_by_kw(keyword):
     if _is_in_db(str(keyword)):
         db = mysql.connector.connect(
-            host='127.0.0.1',
+            host='24.102.174.6',
             user='hoslyDB',
             password='Extr@ctoso700',
             database='scraperp1'
@@ -123,7 +123,7 @@ def _get_info_by_kw(keyword):
 
 def _storeBlob(filepath, prodName):
     db = mysql.connector.connect(
-        host='127.0.0.1',
+        host='24.102.174.6',
         user='hoslyDB',
         password='Extr@ctoso700',
         database='scraperp1'
