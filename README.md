@@ -5,3 +5,5 @@ The scraper will take a keyword as a parameter and search for products related t
 This scraper needs to be debugged and made to be reproducible on other computers since this was originally designed to log to a
 databse in my localhost as well as store all results in that database. Updates will be coming in the future and I will try my best to 
 keep it updated and working.
+
+You can find the specifics of the scraper in the report.txt file.
