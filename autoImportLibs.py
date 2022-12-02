@@ -2,15 +2,18 @@ import subprocess
 import re
 import os
 import time
-#selenium
-#webdriver_manager
-#bs4
-#pandas
-#mysql-connector-python
-#pillow
-#lxml
-#customtkinter
-#requests
+
+#Libraries to import
+#   - selenium
+#   - webdriver_manager
+#   - bs4
+#   - pandas
+#   - mysql-connector-python
+#   - pillow
+#   - lxml
+#   - customtkinter
+#   - requests
+
 
 def installLibs(venv=False):
     if venv == True:

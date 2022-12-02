@@ -161,8 +161,9 @@ def _generate_img_key(productName: str) -> str:
 
 if __name__ == '__main__':
     #x = _scraper_Logs(2, '2/3/4', '2:33', 'scrapah', 'error', 'scraper not working')
-    x = _clear_Table('product_pictures')
-    #x = _instantiate()
+    #x = _clear_Table('product_pictures')
+    x = _instantiate()
     #x = _is_in_db('Phone')
     #x = _get_info_by_kw('Phone')
+    print(x)
 

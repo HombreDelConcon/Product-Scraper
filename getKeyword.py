@@ -194,7 +194,7 @@ def getKeywordTargetMain(keyword: str, inst: int) -> str:
     funcName = 'getKeywordTargetMain'
   
     try:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'TRG:Starting Target scraper')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'TRG:Starting Target scraper')
         options = Options()
         #options.add_argument('headless')
         options.add_argument('start maximized')
@@ -207,7 +207,7 @@ def getKeywordTargetMain(keyword: str, inst: int) -> str:
         search.send_keys(keyword)
         search.send_keys(Keys.RETURN)
     except Exception as e:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'TRG:Error in traversal')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'TRG:Error in traversal')
         return None
 
     try:
@@ -217,11 +217,11 @@ def getKeywordTargetMain(keyword: str, inst: int) -> str:
         curURL = driver.current_url
 
     except Exception as e:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'TRG:Error returning results')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'ERROR', 'TRG:Error returning results')
         return None
 
     else:
-        _sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'TRG:Traversal finished')
+        #_sL(scraperInstance, _getDate(), _getTime(), funcName, 'INFO', 'TRG:Traversal finished')
         driver.quit()
         return(curURL)
 

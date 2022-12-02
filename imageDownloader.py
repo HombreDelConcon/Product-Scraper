@@ -8,9 +8,10 @@ import mysql.connector
 from db_Interactions import _store_product_info as _sP
 from db_Interactions import _storeBlob
 
+
 #Takes an image URL as a parameter as well as a folder name and stores the image as a JPG
 #   in the specified directory
-def _downloadImg(image_url, folder, productName):
+def _downloadImg(image_url:str , folder:str, productName:str) -> str:
     #Variable to store current working directory
     dir_arr = os.getcwd().split('\\')
     cur_dir = dir_arr[len(dir_arr)-1]
@@ -57,7 +58,8 @@ def _downloadImg(image_url, folder, productName):
 #   that are above the cap, e.g. if I pass in a list of image paths and a cap of 20 with a
 #   folder name of img_folder, it will store the first 20 images in the list of images and
 #   delete every other image that is not within the 20 specified in the img_folder directory
-def _clean_remainder(img_list, cap, folder):
+def _clean_remainder(img_list:list , cap:int, folder:int) -> None:
+    DeprecationWarning('This function is deprecated and is not necessary')
     cur_dir = os.getcwd().split('\\')
     cur_dir = cur_dir[len(cur_dir)-1]
 
@@ -72,7 +74,8 @@ def _clean_remainder(img_list, cap, folder):
         if os.path.isfile(image_path):
             os.remove(image_path)
 
-def _retrieveBlob(blobID):
+#Retrive images from the database and returns them 
+def _retrieveBlob(blobID:str) -> 'BLOB image object':
     db = mysql.connector.connect(
         host='127.0.0.1',
         user='hoslyDB',
@@ -94,9 +97,10 @@ def _img_resize(img_path, imageWidth, imageHeight):
     return new_img
         
 def main():
-    x = _downloadImg('https://c1.neweggimages.com/ProductImageCompressAll300/A0SD_1_20190708301467451.jpg', 'product_images_Newegg', 'Random Name')
+    #x = _downloadImg('https://c1.neweggimages.com/ProductImageCompressAll300/A0SD_1_20190708301467451.jpg', 'product_images_Newegg', 'Random Name')
     #x = _img_resize('shots\\TargetLogo.png', 90, 115)
     #x = _retrieveBlob('RandomName182075969')
+    x = 1
     return x
 if __name__ == '__main__':
     x = main()
