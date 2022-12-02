@@ -1,7 +1,13 @@
 import mysql.connector
 import time
 
-def _store_product_info(url, prod_name, prod_price, kw, retailer, image_path):
+#Updated: 12/02/22
+
+#Designed to store all the functions used to interact with the database which I am still trying to figure out how not
+#   to run on a localhost
+
+#Store product information in the database about the products
+def _store_product_info(url: str, prod_name:str, prod_price: float, kw: str, retailer: str, image_path: str) -> None:
     db = mysql.connector.connect(
         host='24.102.174.6',
         user='hoslyDB',
@@ -16,7 +22,8 @@ def _store_product_info(url, prod_name, prod_price, kw, retailer, image_path):
     db.commit()
     #print(cursor.rowcount, 'record inserted')
 
-def _scraper_Logs(scraper_instance, date, time, function_name, log_type, log_description):
+#Log information about the running processes to the database
+def _scraper_Logs(scraper_instance: int, date: str, time: str, function_name: str, log_type: str, log_description: str) -> None:
     db = mysql.connector.connect(
         host='24.102.174.6',
         user='hoslyDB',
@@ -30,8 +37,9 @@ def _scraper_Logs(scraper_instance, date, time, function_name, log_type, log_des
     cursor.execute(SQL, VAL)
     db.commit()
     #print(cursor.rowcount, 'record inserted')
-    
-def _clear_Table(table_name=None):
+
+#Clear specified database table/ truncate table
+def _clear_Table(table_name: str=None) -> None:
     db = mysql.connector.connect(
         host='24.102.174.6',
         user='hoslyDB',
@@ -56,7 +64,8 @@ def _clear_Table(table_name=None):
     db.commit()
     #print('Table %s cleared' % VAL)
 
-def _instantiate():
+#Keep track of the instance in which the web scraper is running for debugging purposes 
+def _instantiate() -> int:
     db = mysql.connector.connect(
         host='24.102.174.6',
         user='hoslyDB',
@@ -75,7 +84,8 @@ def _instantiate():
         scraperInstance = int(result[0][0]) + 1
     return scraperInstance
 
-def _is_in_db(keyword):
+#Check if a product is already in the database
+def _is_in_db(keyword: str) -> bool:
     db = mysql.connector.connect(
         host='24.102.174.6',
         user='hoslyDB',
@@ -92,7 +102,8 @@ def _is_in_db(keyword):
         return False
     return True
 
-def _get_info_by_kw(keyword):
+#Search database for all instances of a keyword
+def _get_info_by_kw(keyword: str) -> list:
     if _is_in_db(str(keyword)):
         db = mysql.connector.connect(
             host='24.102.174.6',
@@ -121,7 +132,8 @@ def _get_info_by_kw(keyword):
         return (lenNewegg, lenAMZ, lenTarget)    
     return None
 
-def _storeBlob(filepath, prodName):
+#Store BLOBs in the database. Basically storing images in bytes and return a key to reference the image
+def _storeBlob(filepath: str, prodName: str) -> str:
     db = mysql.connector.connect(
         host='24.102.174.6',
         user='hoslyDB',
@@ -140,7 +152,8 @@ def _storeBlob(filepath, prodName):
     db.commit()
     return imgKey
 
-def _generate_img_key(productName):
+#Generate unique key for each image name that is fed to it
+def _generate_img_key(productName: str) -> str:
     sp1 = str(time.monotonic()).replace('.', '')
     sp2 = str(productName).replace(' ', '').replace('.', '')
     key = sp2 + sp1

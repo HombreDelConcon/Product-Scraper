@@ -26,7 +26,7 @@ from db_Interactions import _instantiate
 from db_Interactions import _is_in_db, _get_info_by_kw
 
 
-#UPDATED: 11/24/2022
+#UPDATED: 11/28/2022
 
 #---------------IMPORTANT--------------------------------------------------------
 
@@ -240,6 +240,7 @@ def main():
     print('Please input a keyword:')
     keyword = input()
     scraperInstance = _instantiate()
+    funcName = 'Main'
     if _is_in_db(keyword):
         n = _get_info_by_kw(keyword)
         return n
