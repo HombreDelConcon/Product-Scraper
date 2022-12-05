@@ -99,7 +99,7 @@
 				++ options.add_argument('--disable-blink-features=AutomationControlled') as this will help
 				the scraper not get caught in the CAPTCHA as often
 		~ the we build the web driver with webdriver.Chrome(service=Service(ChormeDriverManager().install()), options=
-		'the variable storing our Options() object')
+		"the variable storing our Options() object")
 		~ Now we just call on the driver.get(URL) to have the driver access the website
 		~ from there we can use the find_elemnt(By.*identificator*, "identificator name")
 		~ we can also use the .send_keys('string') to have the driver type in somewhere
@@ -118,28 +118,29 @@
 	results to the user. The scraper will follow these steps:
 		~ Take keyword from user as input
 		~ search online retailers with the keyword
-		~ return results in (name, price) tuples
+		~ return results in tuples
 		~ the product images will also be downloaded to a directory
 		~ the results are then displayed to the user
-		~ If the user likes the results then the result diplayed to the user will be stored in a database (URL, name, price, keyword, image path)
+		~ The rusults then will be stored in a database (URL, name, price, keyword, image path). Of course each individual element
+		will be stored in its own column.
 		for future reference
 
 > Additional elements:
 	- A feature to be able to download images to a directory as well as clearing this directory
-	- Logging of in-app events to a file
+	- ~~Logging of in-app events to a file~~ // The scraper now logs to a database
 	- GUI
 
 > Setbacks
-	- Walmart does not like to be scraped
+	- Walmart does not like to be scraped (ain't stoppig me though)
 	- Target is not returning the name and price data. Apparently, you need to check the Json from the page to get that info
 	- Target is proving a worthy opponent, I need to find a way to refresh the authorization token. Found the way, it came to scraping the 
 	Auth tokens from a request to the server and then just apply those to my current search
 	- logging without triggering the webdriver_manager terminal logging is proving difficult. The solution became to just log to the database
-	- Amazon started blocking scraping attempts to force people to go through their API
+	- Amazon started blocking scraping attempts to force people to go through their API, looking into a fix
 
 > Making the GUI
-	- The GUI will be made using tkinter
-	- Learn and then explain process
+	- The GUI will be made using tkinter and customtkinter which just inherits from tkinter
+	- GUI is of the least importance at the moment so I am working on other features before working on the GUI
 
 > Downloading images to a directory
 	- The library  used to decide which directory we will be downloading the images to, we use the os module
@@ -151,13 +152,13 @@
 		there it is just storing the image.
 		~ To store I open a file with the name of the image. For the name of the image I just use the URL of the image and replace all the 
 		periods as well as the forward slashes. Then I write the binary of the URL to that image and store it with the .jpg extension
-		~ After this, the function will use a helper function to _storeBLOB() to store the image into a database because in web scraping, 
+		~ After this, the function will use a helper function _storeBLOB() to store the image into a database because in web scraping,
 		saving the data you scrape constantly cannot be stressed enough.
 
 > Database design:
-	- For this database we are going to be using two tables:
+	- For this database we are going to be using two tables to store product information:
 		~ One table to store product information 
-			+ Rows:
+			+ Columns:
 				++ product URL
 				++ product name
 				++ product price
@@ -165,13 +166,10 @@
 				++ product retailer
 				++ product image key (will be used as a primary key to get the product image)
 		~ One table to store product images
+			+ Columns:
 				++ product image key (used as PK)
 				++ product image stored as BLOB 
+		
+	- We will be suing one table to store the scraper logs 
 
-
-> Making the GUI
-	- The libraries used to make the GUI are:
-		~ tkinter
-		~ customtkinter
-	- ...EXPLAIN...
 
