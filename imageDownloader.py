@@ -74,8 +74,8 @@ def _clean_remainder(img_list:list , cap:int, folder:int) -> None:
         if os.path.isfile(image_path):
             os.remove(image_path)
 
-#Retrive images from the database and returns them 
-def _retrieveBlob(blobID:str) -> 'BLOB image object':
+#Retrive images from the database and returns them as a BLOB 
+def _retrieveBlob(blobID:str) -> bytes:
     db = mysql.connector.connect(
         host='127.0.0.1',
         user='hoslyDB',
@@ -88,8 +88,11 @@ def _retrieveBlob(blobID:str) -> 'BLOB image object':
     cursor.execute(SQL, VAL)
     result = cursor.fetchone()[1]
     return result
-    
-def _img_resize(img_path, imageWidth, imageHeight):
+
+#Resize desired image that is fed to it. It stores the images in a 
+#   specific path since this function was not really mean to aid the 
+#   scraper directly.
+def _img_resize(img_path:str , imageWidth:int, imageHeight:int) -> bytes:
     image = Image.open(img_path)
     new_img = image.resize((imageWidth, imageHeight))
     new_img.save('shots\\TargetLogoResizedPy.png')

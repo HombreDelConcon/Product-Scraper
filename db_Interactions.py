@@ -132,7 +132,7 @@ def _get_info_by_kw(keyword: str) -> list:
         return (lenNewegg, lenAMZ, lenTarget)    
     return None
 
-#Store BLOBs in the database. Basically storing images in bytes and return a key to reference the image
+#Store BLOBs in the database. Basically storing images in bytes and return a primary key to reference the image
 def _storeBlob(filepath: str, prodName: str) -> str:
     db = mysql.connector.connect(
         host='24.102.174.6',
@@ -152,7 +152,7 @@ def _storeBlob(filepath: str, prodName: str) -> str:
     db.commit()
     return imgKey
 
-#Generate unique key for each image name that is fed to it
+#Generate primary key for each image name that is fed to it
 def _generate_img_key(productName: str) -> str:
     sp1 = str(time.monotonic()).replace('.', '')
     sp2 = str(productName).replace(' ', '').replace('.', '')

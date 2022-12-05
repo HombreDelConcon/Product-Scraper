@@ -6,12 +6,13 @@ import time
 from db_Interactions import _store_product_info as _sp
 from imageDownloader import _downloadImg as _dIMG
 from imageDownloader import _clean_remainder as _cl
+from headers import headerDict
 
 #_downloadImg(image_url, folder):
 #_store_product_info(url, prod_name, prod_price, kw, retailer, image_path)
 
 #Scrape product information from walmart main page
-def scrapeDataWalmart(link, inst):
+def scrapeDataWalmart(link:str, inst:int) -> None:
     if link == None:
         print('Nothing returned')
         return None
@@ -23,6 +24,7 @@ def scrapeDataWalmart(link, inst):
         
         #Contains HTTP headers for scraper
         HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9", "Accept-Encoding": "gzip, deflate", "Accept-Language": "en-US,en;q=0.9,es-US;q=0.8,es;q=0.7", "Upgrade-Insecure-Requests": "1", "X-Amzn-Trace-Id": "Root=1-6292aed6-1f65c2db636f27cb7ebcb533"}
+        HEADERS.update(headerDict())
         URL = link
         webpage = requests.get(URL, headers=HEADERS)
 
@@ -58,7 +60,7 @@ def scrapeDataWalmart(link, inst):
                 pass
 
 #Scrape product information from Amazon results page
-def scrapeDataAMZ(link, inst, kw):
+def scrapeDataAMZ(link:str, inst:int, kw:str) -> int:
     #The traversal functions will return none if the url is None
     if link == None:
         print('Nothing returned')
@@ -68,6 +70,7 @@ def scrapeDataAMZ(link, inst, kw):
         URL = link
         #Contains HTTP headers for scraper 
         HEADERS = {"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9", "Accept-Encoding": "gzip, deflate", "Accept-Language": "en-US,en;q=0.9,es-US;q=0.8,es;q=0.7", "Host": "httpbin.org", "Upgrade-Insecure-Requests": "1", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36","X-Amzn-Trace-Id": "Root=1-62def870-3af35c732649e7f2796478a5"}
+        HEADERS.update(headerDict())
         webpage = requests.get(URL, headers=HEADERS)
 
         #Gets the HTML of the page and parses through it, also cleans it up
@@ -96,7 +99,7 @@ def scrapeDataAMZ(link, inst, kw):
                         price: <span class="a-offscreen"></span>"
                         name: <span class="a-size-base-plus a-color-base a-text-normal"></span>"
                         """
-                        
+                        #
                         prodName = container.find('span', {'class':'a-size-base-plus a-color-base a-text-normal'}).get_text().strip()
                         prodPrice = container.find('span', {'class':'a-offscreen'}).get_text().strip()
                         prodImg = container.find('img', {'class':'s-image'})['src']
@@ -151,7 +154,7 @@ def scrapeDataAMZ(link, inst, kw):
         return totalProds
         #return soup2
     
-def scrapeDataNewegg(link, inst, kw):
+def scrapeDataNewegg(link: str, inst:int, kw:str) -> int:
     if link == None:
         return None
 
@@ -163,6 +166,7 @@ def scrapeDataNewegg(link, inst, kw):
 
             #Contains HTTP headers for scraper
             HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9", "Accept-Encoding": "gzip, deflate", "Accept-Language": "en-US,en;q=0.9,es-US;q=0.8,es;q=0.7", "Upgrade-Insecure-Requests": "1", "X-Amzn-Trace-Id": "Root=1-6292aed6-1f65c2db636f27cb7ebcb533"}
+            HEADERS.update(headerDict())
             URL = link
             webpage = requests.get(URL, headers=HEADERS)
 
@@ -207,7 +211,7 @@ def scrapeDataNewegg(link, inst, kw):
         except:
             return None
 
-def scrapeDataTarget2(link, keyword):
+def scrapeDataTarget2(link:str, keyword:str):
     if link == None:
         print('Nothing returned')
         return None
@@ -279,7 +283,6 @@ def scrapeDataTarget2(link, keyword):
             
             response = requests.get('https://redsky.target.com/redsky_aggregations/v1/web/plp_search_v1', params=params, cookies=cookies, headers=headers)
             results_json = response.json()
-            return results_json
             resultItems = results_json['data']['search']['products']
 
             for result in resultItems:
@@ -313,7 +316,7 @@ def scrapeDataTarget2(link, keyword):
             
         return totalProducts
 
-def refreshTokens(url):
+def refreshTokens(url:str) -> str:
     if url == None:
         return None
     else:
@@ -414,7 +417,7 @@ def refreshTokens(url):
         refreshToken = json_data['access_token']
         return refreshToken
 
-def scrapeDataTarget(link, keyword, inst):
+def scrapeDataTarget(link:str, keyword:str, inst:int) -> list:
     if link == None:
         return None
 
@@ -458,6 +461,7 @@ def scrapeDataTarget(link, keyword, inst):
                 'sec-fetch-site': 'same-site',
                 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36',
             }
+            headers.update(headerDict())
 
             params = {
                 'key': '9f36aeafbe60771e321a7cc95a78140772ab3e96',
@@ -521,7 +525,7 @@ def scrapeDataTarget(link, keyword, inst):
         for i in range(len(price)):
             try:
                 totalProducts.append((product_title[i], price[i], prodURL[i], prodImg[i], prodImgPath[i]))
-                _sp(prodURL[i], product_title[i], price[i].replace('$', '').replace(',', ''), prodKW, prodRetailer, prodImgPath[i])
+                #_sp(prodURL[i], product_title[i], price[i].replace('$', '').replace(',', ''), prodKW, prodRetailer, prodImgPath[i])
             except Exception as e:
                 pass
 
@@ -542,7 +546,7 @@ def scrapeDataTarget(link, keyword, inst):
             
     
 if __name__ == '__main__':
-    x = scrapeDataTarget('https://www.target.com/s?searchTerm=watch', 'testKW', 1)
+    x = scrapeDataTarget('https://www.target.com/s?searchTerm=watch', 'watch', 1)
     #x = scrapeDataNewegg('https://www.newegg.com/p/pl?N=100093102%20600480562', 1, 'tt')
     #x = scrapeDataAMZ('https://www.amazon.com/s?k=memory&crid=23J6NKRBFNT14&sprefix=%2Caps%2C68&ref=nb_sb_noss', 1, 'testKW')
     #x = refreshTokens('https://www.target.com/s?searchTerm=tv')
