@@ -491,7 +491,6 @@ def scrapeDataTarget(link:str, keyword:str, inst:int) -> list:
             tempDict = {'accessToken': str(newRefreshToken)}
             cookieStore.update(tempDict)
             cookies.update(cookieStore)
-            
             response = requests.get('https://redsky.target.com/redsky_aggregations/v1/web/plp_search_v1', params=params, cookies=cookies, headers=headers)
             results_json = response.json()
             resultItems = results_json['data']['search']['products']

@@ -87,6 +87,7 @@ def _getAmzTrace(html:str) -> tuple:
             return (matches.group(1), matches.group(2))
         return None
 
+#Use regex and return the AcceptLanguage header in a tuple 
 def _getAcceptLanguage(html:str) -> tuple:
     try:
         AcceptLanguagePattern = re.compile(r'("Accept-Language"): (".+")')
@@ -99,7 +100,7 @@ def _getAcceptLanguage(html:str) -> tuple:
             return (matches.group(1), matches.group(2))
         return None
 
-
+#use regex and return the CacheControl header in a tuple 
 def _getCacheControl(html:str) -> tuple:
     try:
         CacheControlPattern = re.compile(r'("Cache-Control"): (".+")')
@@ -112,6 +113,7 @@ def _getCacheControl(html:str) -> tuple:
             return (matches.group(1), matches.group(2))
         return None
 
+#Use regex and return the UpgradeInsecureRequests header in a tuple 
 def _getUpgradeInsecureRequests(html:str) -> tuple:
     try:
         UpgradeInsecureRequestsPattern = re.compile(r'("Upgrade-Insecure-Requests"): (".+")')
