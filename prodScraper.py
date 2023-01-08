@@ -3,13 +3,7 @@ import requests
 #import pandas as pd
 import json
 import time
-from db_Interactions import _store_product_info as _sp
-from imageDownloader import _downloadImg as _dIMG
-from imageDownloader import _clean_remainder as _cl
 from headers import headerDict
-
-#_downloadImg(image_url, folder):
-#_store_product_info(url, prod_name, prod_price, kw, retailer, image_path)
 
 #Scrape product information from walmart main page
 def scrapeDataWalmart(link:str, inst:int) -> None:
@@ -18,20 +12,17 @@ def scrapeDataWalmart(link:str, inst:int) -> None:
         return None
 
     else:
-        #Stores extra information that will be store in the DB later
-        retailerDB = 'Walmart'
-        URLDB = link
-        
         #Contains HTTP headers for scraper
         HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36", "Accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9", "Accept-Encoding": "gzip, deflate", "Accept-Language": "en-US,en;q=0.9,es-US;q=0.8,es;q=0.7", "Upgrade-Insecure-Requests": "1", "X-Amzn-Trace-Id": "Root=1-6292aed6-1f65c2db636f27cb7ebcb533"}
         HEADERS.update(headerDict())
         URL = link
         webpage = requests.get(URL, headers=HEADERS)
 
+        time.sleep(3)
+
         #Gets the HTML of the page and parses through it, also cleans it up
         soup = BeautifulSoup(webpage.content, 'lxml')
         soup2 = BeautifulSoup(soup.prettify(), 'lxml')
-
 
         #Stores the individual sections of product information
         containers = soup2.find_all('div', {'class': 'mb1 ph1 pa0-xl bb b--near-white w-25'})#'sans-serif mid-gray relative flex flex-column w-100'})
@@ -60,23 +51,27 @@ def scrapeDataWalmart(link:str, inst:int) -> None:
                 pass
 
 #Scrape product information from Amazon results page
-def scrapeDataAMZ(link:str, inst:int, kw:str) -> int:
+def scrapeDataAMZ(link:str, kw:str) -> int:
     #The traversal functions will return none if the url is None
     if link == None:
         print('Nothing returned')
         return None
 
-    else:   
+    elif type(link) == str:   
         URL = link
         #Contains HTTP headers for scraper 
         HEADERS = {"Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9", "Accept-Encoding": "gzip, deflate", "Accept-Language": "en-US,en;q=0.9,es-US;q=0.8,es;q=0.7", "Host": "httpbin.org", "Upgrade-Insecure-Requests": "1", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36","X-Amzn-Trace-Id": "Root=1-62def870-3af35c732649e7f2796478a5"}
         HEADERS.update(headerDict())
         webpage = requests.get(URL, headers=HEADERS)
 
+        time.sleep(3)
+
         #Gets the HTML of the page and parses through it, also cleans it up
         soup = BeautifulSoup(webpage.content, 'lxml')
         soup2 = BeautifulSoup(soup.prettify(), 'lxml')
         #return soup2
+        print(soup2)
+        return
         
         totalProds = 0
         totalExceptions = 0
@@ -106,10 +101,8 @@ def scrapeDataAMZ(link:str, inst:int, kw:str) -> int:
                         prodURL = container.find('a', {'class':'a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal'})['href']
                         prodKW = kw
                         prodRetailer = 'Amazon'
-                        imgKey = _dIMG(str(prodImg), 'product_images_Amazon', prodName)
                         imgKey = None
                         tup = (prodName, prodPrice, prodImg, prodURL, prodKW, prodRetailer, imgKey)
-                        _sp(prodURL, prodName, float(prodPrice.replace('$', '').replace(',', '')), prodKW, prodRetailer, imgKey)
                         print(tup)
                         print()
                         totalProds += 1
@@ -141,10 +134,8 @@ def scrapeDataAMZ(link:str, inst:int, kw:str) -> int:
                         prodURL = 'https://www.amazon.com' + str(container.find('a', {'class':'a-link-normal s-underline-text s-underline-link-text s-link-style a-text-normal'})['href'])
                         prodKW = kw
                         prodRetailer = 'Amazon'
-                        imgKey = _dIMG(str(prodImg), 'product_images_Amazon', prodName)
                         imgKey = None 
                         tup = (prodName, prodPrice, prodImg, prodURL, prodKW, prodRetailer, imgKey)
-                        _sp(prodURL, prodName, float(prodPrice.replace('$', '').replace(',', '')), prodKW, prodRetailer, imgKey)
                         print(tup)
                         print()
                         totalProds += 1
@@ -153,6 +144,8 @@ def scrapeDataAMZ(link:str, inst:int, kw:str) -> int:
                         pass
         return totalProds
         #return soup2
+    else:
+        raise BaseException('Link must be of type string')
     
 def scrapeDataNewegg(link: str, inst:int, kw:str) -> int:
     if link == None:
@@ -545,9 +538,10 @@ def scrapeDataTarget(link:str, keyword:str, inst:int) -> list:
             
     
 if __name__ == '__main__':
-    x = scrapeDataTarget('https://www.target.com/s?searchTerm=watch', 'watch', 1)
+    #x = scrapeDataTarget('https://www.target.com/s?searchTerm=watch', 'watch', 1)
     #x = scrapeDataNewegg('https://www.newegg.com/p/pl?N=100093102%20600480562', 1, 'tt')
-    #x = scrapeDataAMZ('https://www.amazon.com/s?k=memory&crid=23J6NKRBFNT14&sprefix=%2Caps%2C68&ref=nb_sb_noss', 1, 'testKW')
+    x = scrapeDataAMZ('https://www.amazon.com/s?k=table&crid=164J92DHDGJ31&sprefix=table%2Caps%2C101&ref=nb_sb_noss_2', 'table')
+    print(x)
     #x = refreshTokens('https://www.target.com/s?searchTerm=tv')
     #x = scrapeDataAMZ('https://www.amazon.com/s?k=table&crid=3O51A4P7GR9TN&sprefix=table%2Caps%2C137&ref=nb_sb_noss_1', 1, 'testKW')
 
